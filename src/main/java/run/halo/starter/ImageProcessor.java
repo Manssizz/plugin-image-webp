@@ -1,6 +1,5 @@
 package run.halo.starter;
 
-import io.github.darkxanter.webp.WebPImageWriter;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
@@ -82,10 +81,12 @@ public class ImageProcessor {
 
     private void saveAsWebP(BufferedImage image, String outputPath, float quality) throws IOException {
         // Use WebP writer with quality
-        WebPImageWriter writer = new WebPImageWriter();
+        ImageWriter writer = ImageIO.getImageWritersByFormatName("webp").next();
         ImageWriteParam param = writer.getDefaultWriteParam();
-        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        param.setCompressionQuality(quality);
+        if (param.canWriteCompressed()) {
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            param.setCompressionQuality(quality);
+        }
         writer.setOutput(ImageIO.createImageOutputStream(new File(outputPath)));
         writer.write(null, new IIOImage(image, null, null), param);
         writer.dispose();
