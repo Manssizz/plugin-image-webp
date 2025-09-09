@@ -16,7 +16,7 @@ dependencies {
     compileOnly 'run.halo.app:api'
 
     // Image processing dependencies
-    implementation 'org.sejda.imageio:imageio-webp:0.1.6'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.9.4'
     implementation 'net.coobird:thumbnailator:0.4.20'
 
     testImplementation 'run.halo.app:api'
