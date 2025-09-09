@@ -8,6 +8,7 @@ group 'run.halo.starter'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -15,7 +16,7 @@ dependencies {
     compileOnly 'run.halo.app:api'
 
     // Image processing dependencies
-    implementation 'org.sejda.imageio:imageio-webp:0.1.6'
+    implementation 'com.github.gotson:webp-imageio:0.3.3'
     implementation 'net.coobird:thumbnailator:0.4.20'
 
     testImplementation 'run.halo.app:api'

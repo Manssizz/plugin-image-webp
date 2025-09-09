@@ -1,5 +1,6 @@
 package run.halo.starter;
 
+import com.github.gotson.webp.WebP;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.springframework.stereotype.Service;
@@ -77,9 +78,8 @@ public class ImageProcessor {
     }
 
     private void saveAsWebP(BufferedImage image, String outputPath, float quality) throws IOException {
-        // Use ImageIO with WebP writer
-        ImageIO.write(image, "webp", new File(outputPath));
-        // Note: Quality setting might need custom WebP writer; for now, basic conversion
+        // Use WebP writer with quality
+        WebP.write(image, new File(outputPath), quality);
     }
 
     private int calculateX(String position, int imageWidth, int textWidth) {
