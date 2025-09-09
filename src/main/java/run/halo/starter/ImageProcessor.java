@@ -1,6 +1,6 @@
 package run.halo.starter;
 
-import com.github.gotson.webp.WebP;
+import io.github.darkxanter.webp.WebP;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.springframework.stereotype.Service;
