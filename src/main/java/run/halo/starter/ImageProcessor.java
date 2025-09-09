@@ -1,6 +1,9 @@
 package run.halo.starter;
 
-import io.github.darkxanter.webp.WebP;
+import io.github.darkxanter.webp.WebPImageWriter;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.springframework.stereotype.Service;
@@ -79,7 +82,13 @@ public class ImageProcessor {
 
     private void saveAsWebP(BufferedImage image, String outputPath, float quality) throws IOException {
         // Use WebP writer with quality
-        WebP.write(image, new File(outputPath), quality);
+        WebPImageWriter writer = new WebPImageWriter();
+        ImageWriteParam param = writer.getDefaultWriteParam();
+        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        param.setCompressionQuality(quality);
+        writer.setOutput(ImageIO.createImageOutputStream(new File(outputPath)));
+        writer.write(null, new IIOImage(image, null, null), param);
+        writer.dispose();
     }
 
     private int calculateX(String position, int imageWidth, int textWidth) {
