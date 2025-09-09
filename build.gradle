@@ -14,6 +14,10 @@ dependencies {
     implementation platform('run.halo.tools.platform:plugin:2.21.0')
     compileOnly 'run.halo.app:api'
 
+    // Image processing dependencies
+    implementation 'org.sejda.imageio:imageio-webp:0.1.6'
+    implementation 'net.coobird:thumbnailator:0.4.20'
+
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -15,8 +15,111 @@ spec:
   homepage: https://github.com/halo-dev/plugin-starter#readme
   repo: https://github.com/halo-dev/plugin-starter
   issues: https://github.com/halo-dev/plugin-starter/issues
-  displayName: "插件快速开始模板"
-  description: "这是一个插件快速开始模板"
+  displayName: "Image WebP Converter with Watermark"
+  description: "Auto-convert uploaded images to WebP with customizable watermark"
   license:
     - name: "GPL-3.0"
       url: "https://github.com/halo-dev/plugin-starter/blob/main/LICENSE"
+  settingName: "image-webp-settings"
+  configMapName: "image-webp-config"
+  settings:
+    - group: "watermark"
+      label: "Watermark Settings"
+      formSchema:
+        - $formkit: "radio"
+          name: "watermarkType"
+          label: "Watermark Type"
+          value: "text"
+          options:
+            - label: "Text"
+              value: "text"
+            - label: "Image"
+              value: "image"
+        - $formkit: "text"
+          name: "textContent"
+          label: "Text Content"
+          value: "Sample Watermark"
+          if: "$watermarkType === 'text'"
+        - $formkit: "color"
+          name: "textColor"
+          label: "Text Color"
+          value: "#ffffff"
+          if: "$watermarkType === 'text'"
+        - $formkit: "number"
+          name: "textSize"
+          label: "Text Size"
+          value: 20
+          if: "$watermarkType === 'text'"
+        - $formkit: "select"
+          name: "textPosition"
+          label: "Text Position"
+          value: "bottom-right"
+          options:
+            - label: "Top Left"
+              value: "top-left"
+            - label: "Top Right"
+              value: "top-right"
+            - label: "Bottom Left"
+              value: "bottom-left"
+            - label: "Bottom Right"
+              value: "bottom-right"
+            - label: "Center"
+              value: "center"
+          if: "$watermarkType === 'text'"
+        - $formkit: "file"
+          name: "imagePath"
+          label: "Watermark Image"
+          accept: ".png"
+          if: "$watermarkType === 'image'"
+        - $formkit: "number"
+          name: "imageTransparency"
+          label: "Image Transparency (0-1)"
+          value: 0.5
+          min: 0
+          max: 1
+          step: 0.1
+          if: "$watermarkType === 'image'"
+        - $formkit: "number"
+          name: "imageSize"
+          label: "Image Size (%)"
+          value: 20
+          min: 1
+          max: 100
+          if: "$watermarkType === 'image'"
+        - $formkit: "select"
+          name: "imagePosition"
+          label: "Image Position"
+          value: "bottom-right"
+          options:
+            - label: "Top Left"
+              value: "top-left"
+            - label: "Top Right"
+              value: "top-right"
+            - label: "Bottom Left"
+              value: "bottom-left"
+            - label: "Bottom Right"
+              value: "bottom-right"
+            - label: "Center"
+              value: "center"
+          if: "$watermarkType === 'image'"
+    - group: "webp"
+      label: "WebP Settings"
+      formSchema:
+        - $formkit: "number"
+          name: "webpQuality"
+          label: "WebP Quality (0-1)"
+          value: 0.8
+          min: 0
+          max: 1
+          step: 0.1
+        - $formkit: "checkbox"
+          name: "webpCompression"
+          label: "Enable WebP Compression"
+          value: true
+    - group: "general"
+      label: "General Settings"
+      formSchema:
+        - $formkit: "checkbox"
+          name: "convertHeaderImage"
+          label: "Convert Header Images"
+          value: true

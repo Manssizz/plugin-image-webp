@@ -1,165 +1,200 @@
 <script setup lang="ts">
-import confetti from 'canvas-confetti'
-import { onMounted } from 'vue'
-import RiShareCircleLine from '~icons/ri/share-circle-line'
-import RiCodeBoxLine from '~icons/ri/code-box-line'
-import RiBookReadLine from '~icons/ri/book-read-line'
-import RiComputerLine from '~icons/ri/computer-line'
-import RiArrowRightSLine from '~icons/ri/arrow-right-s-line'
+import { ref } from 'vue'
 
-onMounted(() => {
-  confetti({
-    particleCount: 100,
-    spread: 70,
-    origin: { y: 0.6, x: 0.58 },
-  })
+const settings = ref({
+  watermarkType: 'text',
+  textContent: 'Sample Watermark',
+  textColor: '#ffffff',
+  textSize: 20,
+  textPosition: 'bottom-right',
+  imagePath: '',
+  imageTransparency: 0.5,
+  imageSize: 20,
+  imagePosition: 'bottom-right',
+  webpQuality: 0.8,
+  webpCompression: true,
+  convertHeaderImage: true
 })
+
+const saveSettings = () => {
+  // Placeholder: Save settings to backend
+  console.log('Settings saved:', settings.value)
+}
+
+const handleFileUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    settings.value.imagePath = target.files[0].name // Or handle upload to server
+  }
+}
 </script>
 
 <template>
-  <section id="plugin-starter">
+  <section id="image-webp-settings">
     <div class="wrapper">
-      <span class="title"> 你已经成功运行起了插件！ </span>
-      <span class="message">你可以点击下方文档继续下一步</span>
-      <div class="docs">
-        <a
-          href="https://docs.halo.run/developer-guide/plugin/publish"
-          class="docs__box"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiShareCircleLine />发布一个插件</h2>
-          <span class="docs__box-message"> 了解如何与我们的社区分享您的扩展。 </span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-        <a
-          href="https://docs.halo.run/category/%E5%9F%BA%E7%A1%80"
-          class="docs__box"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiComputerLine />基础概览</h2>
-          <span class="docs__box-message"> 了解插件的项目结构、生命周期、资源配置等。 </span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-        <a
-          href="https://docs.halo.run/developer-guide/plugin/examples/todolist"
-          class="docs__box group"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiBookReadLine />示例插件</h2>
-          <span class="docs__box-message">帮助你从 0 到 1 完成一个插件。</span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-        <a
-          href="https://docs.halo.run/category/api-%E5%8F%82%E8%80%83"
-          class="docs__box"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiCodeBoxLine />API 参考</h2>
-          <span class="docs__box-message">插件中的 API 列表。</span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-      </div>
+      <h1 class="title">Image WebP Converter Settings</h1>
+      <form @submit.prevent="saveSettings" class="settings-form">
+        <div class="group">
+          <h2>Watermark Settings</h2>
+          <div class="form-group">
+            <label for="watermarkType">Watermark Type</label>
+            <select id="watermarkType" v-model="settings.watermarkType">
+              <option value="text">Text</option>
+              <option value="image">Image</option>
+            </select>
+          </div>
+          <div v-if="settings.watermarkType === 'text'">
+            <div class="form-group">
+              <label for="textContent">Text Content</label>
+              <input type="text" id="textContent" v-model="settings.textContent" />
+            </div>
+            <div class="form-group">
+              <label for="textColor">Text Color</label>
+              <input type="color" id="textColor" v-model="settings.textColor" />
+            </div>
+            <div class="form-group">
+              <label for="textSize">Text Size</label>
+              <input type="number" id="textSize" v-model.number="settings.textSize" min="10" max="100" />
+            </div>
+            <div class="form-group">
+              <label for="textPosition">Text Position</label>
+              <select id="textPosition" v-model="settings.textPosition">
+                <option value="top-left">Top Left</option>
+                <option value="top-right">Top Right</option>
+                <option value="bottom-left">Bottom Left</option>
+                <option value="bottom-right">Bottom Right</option>
+                <option value="center">Center</option>
+              </select>
+            </div>
+          </div>
+          <div v-if="settings.watermarkType === 'image'">
+            <div class="form-group">
+              <label for="imagePath">Watermark Image</label>
+              <input type="file" id="imagePath" accept=".png" @change="handleFileUpload" />
+            </div>
+            <div class="form-group">
+              <label for="imageTransparency">Image Transparency (0-1)</label>
+              <input type="number" id="imageTransparency" v-model.number="settings.imageTransparency" min="0" max="1" step="0.1" />
+            </div>
+            <div class="form-group">
+              <label for="imageSize">Image Size (%)</label>
+              <input type="number" id="imageSize" v-model.number="settings.imageSize" min="1" max="100" />
+            </div>
+            <div class="form-group">
+              <label for="imagePosition">Image Position</label>
+              <select id="imagePosition" v-model="settings.imagePosition">
+                <option value="top-left">Top Left</option>
+                <option value="top-right">Top Right</option>
+                <option value="bottom-left">Bottom Left</option>
+                <option value="bottom-right">Bottom Right</option>
+                <option value="center">Center</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="group">
+          <h2>WebP Settings</h2>
+          <div class="form-group">
+            <label for="webpQuality">WebP Quality (0-1)</label>
+            <input type="number" id="webpQuality" v-model.number="settings.webpQuality" min="0" max="1" step="0.1" />
+          </div>
+          <div class="form-group">
+            <label for="webpCompression">
+              <input type="checkbox" id="webpCompression" v-model="settings.webpCompression" />
+              Enable WebP Compression
+            </label>
+          </div>
+        </div>
+        <div class="group">
+          <h2>General Settings</h2>
+          <div class="form-group">
+            <label for="convertHeaderImage">
+              <input type="checkbox" id="convertHeaderImage" v-model="settings.convertHeaderImage" />
+              Convert Header Images
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="save-btn">Save Settings</button>
+      </form>
     </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-#plugin-starter {
-  height: 100vh;
+#image-webp-settings {
+  padding: 2rem;
   background-color: #f8fafc;
+  min-height: 100vh;
 }
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
   .title {
-    font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
   }
 
-  .message {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: #4b5563;
-  }
-
-  .docs {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
-    max-width: 48rem;
-
-    .docs__box {
-      background-color: #fff;
+  .settings-form {
+    .group {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
       border-radius: 0.375rem;
-      padding: 0.75rem;
-      transition-property: all;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 300ms;
-      cursor: pointer;
-      filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
 
-      &:hover {
-        box-shadow:
-          0 0 0 0px #fff,
-          0 0 0 1px rgb(59 130 246 / 0.5),
-          0 0 #0000;
+      h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #374151;
       }
 
-      .docs__box-title {
-        display: flex;
-        flex-direction: row;
-        font-size: 1.125rem;
-        line-height: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-        gap: 0.5rem;
-        align-items: center;
-      }
+      .form-group {
+        margin-bottom: 1rem;
 
-      .docs__box-message {
-        font-size: 0.875rem;
-        line-height: 1.25rem;
-        color: #4b5563;
-      }
+        label {
+          display: block;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+          color: #4b5563;
+        }
 
-      .docs__box-arrow {
-        pointer-events: none;
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        transition-property: all;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 150ms;
-        color: #d1d5db;
-      }
+        input, select {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.25rem;
+          font-size: 0.875rem;
+        }
 
-      &:hover {
-        .docs__box-arrow {
-          color: #9ca3af;
-          transform: translate(00.375rem, 0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
+        input[type="checkbox"] {
+          width: auto;
+          margin-right: 0.5rem;
         }
       }
     }
-  }
 
-  @media (min-width: 640px) {
-    .docs {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .save-btn {
+      background-color: #3b82f6;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #2563eb;
+      }
     }
   }
 }
