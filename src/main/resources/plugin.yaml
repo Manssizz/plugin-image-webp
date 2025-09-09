@@ -20,8 +20,6 @@ spec:
   license:
     - name: "GPL-3.0"
       url: "https://github.com/halo-dev/plugin-starter/blob/main/LICENSE"
-  settingName: "image-webp-settings"
-  configMapName: "image-webp-config"
   settings:
     - group: "watermark"
       label: "Watermark Settings"
